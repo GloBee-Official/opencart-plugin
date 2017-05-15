@@ -38,11 +38,11 @@ class RoboFile extends \Robo\Tasks
     {
         $this->taskDeleteDir('www')->run();
         $this->taskFileSystemStack()
-             ->mirror('vendor/opencart/opencart/upload', 'www')
-             ->chmod('www', 0777, 0000, true)
-             // ->touch('www/config.php')
-             // ->touch('www/admin/config.php')
-             ->run();
+            ->mirror('vendor/opencart/opencart/upload', 'www')
+            ->chmod('www', 0777, 0000, true)
+            // ->touch('www/config.php')
+            // ->touch('www/admin/config.php')
+            ->run();
         $this->_exec(sprintf('mysql -u %1$s -p%2$s -Nse \'show tables\' %3$s | while read table; do mysql -u %1s -p%2$s -e "drop table $table" %3$s; done', $this->config['db_username'], $this->config['db_password'], $this->config['db_database']));
         $install = $this->taskExec('php')->arg('www/install/cli_install.php')->arg('install');
         foreach ($this->config as $option => $value) {
@@ -51,21 +51,21 @@ class RoboFile extends \Robo\Tasks
         $install->run();
         $this->taskDeleteDir('www/install')->run();
         $this->taskGitStack()
-             ->stopOnFail()
-             ->dir('www')
-             ->exec('init')
-             ->add('-A')
-             ->commit('Clean install')
-             ->run();
+            ->stopOnFail()
+            ->dir('www')
+            ->exec('init')
+            ->add('-A')
+            ->commit('Clean install')
+            ->run();
         $this->taskFileSystemStack()
-             ->mirror('vendor/bitpay/php-client/src/Bitpay', 'www/system/library/Bitpay')
-             ->run();
+            ->mirror('vendor/paybee/php-client/src/Bitpay', 'www/system/library/Bitpay')
+            ->run();
         $this->taskGitStack()
-             ->stopOnFail()
-             ->dir('www')
-             ->add('-A')
-             ->commit('Added bitpay/php-client library')
-             ->run();
+            ->stopOnFail()
+            ->dir('www')
+            ->add('-A')
+            ->commit('Added paybee/php-client library')
+            ->run();
 
     }
 
@@ -73,14 +73,14 @@ class RoboFile extends \Robo\Tasks
     {
         $this->taskDeleteDir('tests/phpcs')->run();
         $this->taskFileSystemStack()
-             ->mirror('vendor/opencart/opencart/tests/phpcs', 'tests/phpcs')->run();
+            ->mirror('vendor/opencart/opencart/tests/phpcs', 'tests/phpcs')->run();
     }
 
     public function test()
     {
-    	if (!file_exists(__DIR__.'/tests/phpcs/OpenCart/ruleset.xml')) {
-    		$this->setuptest();
-    	}
+        if (!file_exists(__DIR__.'/tests/phpcs/OpenCart/ruleset.xml')) {
+            $this->setuptest();
+        }
         $this->taskExec('phpcs')->arg('src')->arg('--standard='.__DIR__.'/tests/phpcs/OpenCart/ruleset.xml')->run();
     }
 
@@ -90,35 +90,35 @@ class RoboFile extends \Robo\Tasks
         $port = (is_null($port)) ? 80 : $port;
         $host = parse_url($this->config['http_server'], PHP_URL_HOST);
         $this->taskServer($port)
-             ->host($host)
-             ->dir('www')
-             ->run();
+            ->host($host)
+            ->dir('www')
+            ->run();
     }
 
     public function watch()
     {
         $this->dev();
         $this->taskWatch()
-             ->monitor('composer.json', function () {
+            ->monitor('composer.json', function () {
                 $this->taskComposerUpdate()->run();
                 $this->dev();
-           })->monitor('src/', function () {
+            })->monitor('src/', function () {
                 $this->dev();
-           })->run();
+            })->run();
     }
 
     public function dev()
     {
         $this->taskGitStack()
-             ->stopOnFail()
-             ->dir('www')
-             ->exec('clean -df')
-             ->run();
+            ->stopOnFail()
+            ->dir('www')
+            ->exec('clean -df')
+            ->run();
         $this->taskFileSystemStack()->mirror('src/upload', 'www')->run();
         $this->taskReplaceInFile('www/system/library/bitpay.php')
-             ->from('{{bitpay_lib_version}}')
-             ->to($this->depver('bitpay/php-client'))
-             ->run();
+            ->from('{{bitpay_lib_version}}')
+            ->to($this->depver('paybee/php-client'))
+            ->run();
     }
 
     private function depver($dep)
@@ -138,12 +138,12 @@ class RoboFile extends \Robo\Tasks
     public function build()
     {
         $this->taskDeleteDir('build')->run();
-        $this->taskFileSystemStack()->mirror('src', 'build/bitpay-opencart')->run();
-        $this->taskFileSystemStack()->mirror('vendor/bitpay/php-client/src/Bitpay', 'build/bitpay-opencart/upload/system/library/Bitpay')->run();
-        $this->taskReplaceInFile('build/bitpay-opencart/upload/system/library/bitpay.php')
-             ->from('{{bitpay_lib_version}}')
-             ->to($this->depver('bitpay/php-client'))
-             ->run();
-        $this->taskExec('zip')->dir('build/bitpay-opencart')->arg('-r')->arg('../bitpay-opencart.ocmod.zip')->arg('./')->run();
+        $this->taskFileSystemStack()->mirror('src', 'build/paybee-opencart')->run();
+        $this->taskFileSystemStack()->mirror('vendor/paybee/php-client/src/Bitpay', 'build/paybee-opencart/upload/system/library/Bitpay')->run();
+        $this->taskReplaceInFile('build/paybee-opencart/upload/system/library/bitpay.php')
+            ->from('{{bitpay_lib_version}}')
+            ->to($this->depver('paybee/php-client'))
+            ->run();
+        $this->taskExec('zip')->dir('build/paybee-opencart')->arg('-r')->arg('../paybee-opencart-'.date('Ymd').'.ocmod.zip')->arg('./')->run();
     }
 }
