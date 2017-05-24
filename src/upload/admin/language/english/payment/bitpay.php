@@ -10,7 +10,7 @@ $_['text_bitpay']            = '<a onclick="window.open(\'https://www.globee.com
 $_['text_general']           = 'General';
 $_['text_statuses']          = 'Order Statuses';
 $_['text_advanced']          = 'Advanced';
-$_['text_connect_to_bitpay'] = 'Connect to <img src="view/image/payment/globee_logo.svg" style="height: 36px; margin: -11px -10px -10px -9px">';
+$_['text_connect_to_bitpay'] = 'Connect to <img src="view/image/payment/globee_logo.svg" style="height: 28px; margin: -12px -11px -9px -4px">';
 $_['text_connected']         = 'Connected to GloBee %s';
 $_['text_high']              = 'High';
 $_['text_medium']            = 'Medium';
