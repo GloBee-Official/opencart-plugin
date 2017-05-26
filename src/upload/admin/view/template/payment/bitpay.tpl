@@ -367,26 +367,27 @@
       $('#connect_to_bitpay_dropdown').addClass('disabled');
     });
 
-    <?php if ($bitpay_connection === 'connected') { ?>
-    // Poll the connection to BitPay API
-    var checkConnection = function() {
-      $.get('<?php echo $url_connected; ?>', {dataType: 'json'}).always(function(data) {
-        if (data.error) {
-          $('#api-connected').addClass('hidden');
-          $('#api-disconnected').removeClass('hidden');
-          $('.alert').alert('close')
-          $('#bitpay-page').prepend('<div class="alert alert-danger fade in"><i class="fa fa-exclamation-circle"></i> '+data.error+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-          return;
-        }
-        setTimeout(checkConnection, 1000);
-      });
-    }
-    setTimeout(checkConnection, 1000);
-    <?php } ?>
+      <?php if ($bitpay_connection === 'connected') { ?>
+          // Poll the connection to BitPay API
+          var checkConnection = function() {
+              $.get('<?php echo $url_connected; ?>', {dataType: 'json'}).always(function(data) {
+                  if (data.error) {
+                      $('#api-connected').addClass('hidden');
+                      $('#api-disconnected').removeClass('hidden');
+                      $('.alert').alert('close')
+                      $('#bitpay-page').prepend('<div class="alert alert-danger fade in"><i class="fa fa-exclamation-circle"></i> '+data.error+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                      return;
+                  }
+                  setTimeout(checkConnection, 60000);
+              });
+          }
+          checkConnection();
+      <?php } ?>
 
-    <?php if ($error_request) { ?>
-    $('#tab-support-tab').tab('show');
-    <?php } ?>
+      <?php if ($error_request) { ?>
+          $('#tab-support-tab').tab('show');
+      <?php } ?>
+
   }())
 //--></script>
 <?php echo $footer; ?> 
