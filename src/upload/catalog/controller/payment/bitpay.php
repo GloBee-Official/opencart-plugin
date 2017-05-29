@@ -80,7 +80,7 @@ class ControllerPaymentBitpay extends Controller {
 			$invoice = $this->prepareInvoice($order_info);
 			$invoice = $this->bitpay->createInvoice($invoice);
 		} catch (Exception $e) {
-			$this->session->data['error_bitpay'] = 'Sorry, but there was a problem communicating with BitPay for Bitcoin checkout.';
+			$this->session->data['error_bitpay'] = 'Sorry, but there was a problem communicating with GloBee for Bitcoin checkout.';
 			$this->response->redirect($this->url->link('checkout/checkout'));
 			return;
 		}

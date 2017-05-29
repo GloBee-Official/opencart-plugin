@@ -378,9 +378,9 @@
                       $('#bitpay-page').prepend('<div class="alert alert-danger fade in"><i class="fa fa-exclamation-circle"></i> '+data.error+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                       return;
                   }
-                  setTimeout(checkConnection, 60000);
+                  setTimeout(checkConnection, 30000);
               });
-          }
+          };
           checkConnection();
       <?php } ?>
 
