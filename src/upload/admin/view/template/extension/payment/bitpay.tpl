@@ -57,7 +57,7 @@
                   <div id="api-connected" class="input-group<?php if ($bitpay_connection !== 'connected') { echo ' hidden'; } ?>">
                     <p class="form-control-static text-primary"><i class="fa fa-plug"></i> <?php echo $text_connected; ?></p>
                     <span class="input-group-btn">
-                      <a id="bitpay_disconnect" href="<?php echo $url_disconnect; ?>" class="btn btn-danger"><i class="fa fa-unlink"></i> <?php echo $button_disconnect; ?></a>
+                        <a style="border-radius:3px;" href="<?php echo $url_disconnect; ?>" class="btn btn-danger"><i class="fa fa-unlink"></i> <?php echo $button_disconnect; ?></a>
                     </span>
                   </div>
                 </div>
@@ -367,27 +367,13 @@
       $('#connect_to_bitpay_dropdown').addClass('disabled');
     });
 
-      <?php if ($bitpay_connection === 'connected') { ?>
-          // Poll the connection to BitPay API
-          var checkConnection = function() {
-              $.get('<?php echo $url_connected; ?>', {dataType: 'json'}).always(function(data) {
-                  if (data.error) {
-                      $('#api-connected').addClass('hidden');
-                      $('#api-disconnected').removeClass('hidden');
-                      $('.alert').alert('close')
-                      $('#bitpay-page').prepend('<div class="alert alert-danger fade in"><i class="fa fa-exclamation-circle"></i> '+data.error+'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-                      return;
-                  }
-                  setTimeout(checkConnection, 30000);
-              });
-          };
-          checkConnection();
-      <?php } ?>
+    <?php if ($bitpay_connection === 'connected') { ?>
+  
+    <?php } ?>
 
-      <?php if ($error_request) { ?>
-          $('#tab-support-tab').tab('show');
-      <?php } ?>
-
+    <?php if ($error_request) { ?>
+    $('#tab-support-tab').tab('show');
+    <?php } ?>
   }())
 //--></script>
 <?php echo $footer; ?> 
